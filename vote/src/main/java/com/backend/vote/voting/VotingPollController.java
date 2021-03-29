@@ -1,24 +1,24 @@
 package com.backend.vote.voting;
 
-import com.backend.vote.vote.Vote;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/poll")
 public class VotingPollController {
 
-    @Autowired
-    private VotingPollService service;
+    private final VotingPollService service;
 
-    @GetMapping(value = "/id = {id}")
+    @Autowired
+    public VotingPollController(VotingPollService service) {
+        this.service = service;
+    }
+    @GetMapping(value = "/id={id}")
     public ResponseEntity<VotingPoll> findById(@PathVariable Long id) {
         VotingPoll obj = service.findById(id);
         return ResponseEntity.ok().body(obj);

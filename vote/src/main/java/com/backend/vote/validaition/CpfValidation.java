@@ -1,7 +1,10 @@
 package com.backend.vote.validaition;
 
+import org.springframework.stereotype.Service;
+
 import java.util.InputMismatchException;
 
+@Service
 public class CpfValidation {
 
     public boolean iscpf(String cpf) {

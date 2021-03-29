@@ -13,9 +13,14 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/vote")
 public class VoteController {
-    @Autowired
-    private VoteService service;
 
+
+    private final VoteService service;
+
+    @Autowired
+    public VoteController(VoteService service) {
+        this.service = service;
+    }
 
     @PostMapping
     public ResponseEntity<Vote> insert(@RequestBody Vote vote) {
