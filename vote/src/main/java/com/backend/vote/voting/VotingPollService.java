@@ -1,8 +1,6 @@
 package com.backend.vote.voting;
 
-import com.backend.vote.user.User;
-import com.backend.vote.user.UserRepository;
-import org.apache.velocity.exception.ResourceNotFoundException;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
