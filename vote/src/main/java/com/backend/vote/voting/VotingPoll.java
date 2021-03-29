@@ -2,17 +2,23 @@ package com.backend.vote.voting;
 
 import com.backend.vote.vote.VoteService;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.sql.ResultSet;
 import java.time.LocalDateTime;
 
 @Slf4j
 @Data
 @Entity
 @Table(name = "tb_votingpoll")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class VotingPoll {
 
     @Id
@@ -28,28 +34,24 @@ public class VotingPoll {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime closeTime;
 
-    private enum status {OPEN, CLOSE}
+    private Status status;
 
-    ;
-
-    private enum result {APPROVED, REJECTED}
-
-    ;
+    private Result result;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime createdTime = LocalDateTime.now();
 
     public void setCloseTime(LocalDateTime closeTime) {
-        if (closeTime.isBefore(createdTime)) {
-            this.closeTime = closeTime;
-        } else {
-            log.warn("Close time need to be greater than Open time");
+            if (closeTime.isAfter(openTime)) {
+                this.closeTime = closeTime;
+            } else {
+                log.warn("Close time need to be greater than Open time");
+            }
         }
-    }
 
     public void setOpenTime(LocalDateTime openTime) {
-        if (!openTime.isAfter(createdTime)) {
+        if (!openTime.isBefore(createdTime)) {
             this.openTime = openTime;
         } else {
             log.warn("Open time can't be in the past");
@@ -57,22 +59,25 @@ public class VotingPoll {
     }
 
 
-    public status setStatus(LocalDateTime closeTime) {
+    public Status setStatus(LocalDateTime closeTime) {
         LocalDateTime localDateTime = LocalDateTime.now();
-        if (closeTime.isAfter(localDateTime)) {
-            return status.CLOSE;
+        if (closeTime.isBefore(localDateTime)) {
+            return Status.CLOSE;
         } else {
-            return status.OPEN;
+            return Status.OPEN;
         }
     }
 
-    public result getResult(Long id, byte vote) {
+    public Result setResult(Long id, byte vote) {
         VoteService voteService = new VoteService();
-        if (voteService.countVotes(id, (byte) 0) > voteService.countVotes(id, (byte) 1))
-        {
-            return result.REJECTED;
-        }else{
-            return result.APPROVED;
+        if (getStatus().equals(Status.CLOSE)) {
+            if (voteService.countVotes(id, (byte) 0) > voteService.countVotes(id, (byte) 1)) {
+                return Result.REJECTED;
+            } else {
+                return Result.APPROVED;
+            }
+        } else {
+            return Result.OPEN;
         }
     }
 }

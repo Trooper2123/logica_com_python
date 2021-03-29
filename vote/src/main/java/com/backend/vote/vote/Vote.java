@@ -26,7 +26,7 @@ public class Vote {
     @ManyToOne
     @JoinColumn(name = "votingpoll_id")
     @JsonDeserialize(using = VotingPollJsonDeserializer.class)
-    private VotingPoll votingPoll_id;
+    private VotingPoll votingpoll_id;
 
     private byte vote;
 

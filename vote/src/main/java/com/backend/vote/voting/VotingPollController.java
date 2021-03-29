@@ -33,10 +33,16 @@ public class VotingPollController {
 
     @PostMapping
     public ResponseEntity<VotingPoll> insert(@RequestBody VotingPoll obj) {
-        obj = service.insert(obj);
+        VotingPoll votingPoll = VotingPoll.builder()
+                .subject(obj.getSubject())
+                .openTime(obj.getOpenTime())
+                .closeTime(obj.getCloseTime())
+                .status(obj.setStatus(obj.getCloseTime()))
+                .createdTime(obj.getCreatedTime()).build();
+                obj = service.insert(votingPoll);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(obj.getId()).toUri();
-        return ResponseEntity.created(uri).body(obj);
+                .buildAndExpand(votingPoll.getId()).toUri();
+        return ResponseEntity.created(uri).body(votingPoll);
     }
 
 }
