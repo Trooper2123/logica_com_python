@@ -1,0 +1,10 @@
+body {
+    font-family: system-ui;
+    background: Green;
+    color: white;
+    text-align: center;
+}
+
+#result{
+    font-size: xxx-large;
+}
