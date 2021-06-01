@@ -1,8 +1,8 @@
 def ler_nota():
     validador = False
-    while not validador
-    nota = float(input(("Informe a nota:")))
-        if(nota >= 0 and nota <= 10):
+    while not validador:
+        nota = float(input("Informe a nota:"))
+        if 0 <= nota <= 10:
             validador = True
             return nota
         else:
